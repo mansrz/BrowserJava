@@ -82,6 +82,15 @@ public class AwokenSight extends javax.swing.JFrame {
             }
         });
         
+        webDisplay.setText("<html>\n" +
+"<head>\n" +
+"<title>AwokenHunterBrowser</title>\n" +
+"</head>\n" +
+"<body>\n" +
+"<b><p style=\"font:30pt Georgia;color:#ff0000;\">Welcome</p></b>\n" +
+"<p>This is the intro page of your new browser.</p>\n" +
+"</body>\n" +
+"</html>");
     }
     
     public enum WebProtocol
