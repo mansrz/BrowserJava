@@ -197,11 +197,6 @@ public class AwokenSight extends javax.swing.JFrame {
         requestHTML(navigationArray.get(navigationArrayIndex), WebNavigationType.REFRESH);
     }//GEN-LAST:event_refreshButtonActionPerformed
 
-    private int assignNavigationIndex()
-    {
-        return navigationArray.size() - 1;
-    }
-    
     private String requestHTML(String webAddress, WebNavigationType navigationType)
     {
         
@@ -293,10 +288,9 @@ public class AwokenSight extends javax.swing.JFrame {
                     
                     addressBar.setText(webAddress);
                     webDisplay.setText(htmlString);
-                    //System.out.println(TitleExtractor.getPageTitle(webAddress));
+                    System.out.println(reply);
                     currentHostName = hostAddress;
                     
-                    System.out.println("Before\nIndex: " + navigationArrayIndex + "\nSize: " + navigationArray.size() + "\n");
                     
                     switch (navigationType)
                     {
@@ -348,8 +342,6 @@ public class AwokenSight extends javax.swing.JFrame {
                     {
                         refreshButton.setEnabled(true);
                     }
-                    
-                    System.out.println("After\nIndex: " + navigationArrayIndex + "\nSize: " + navigationArray.size() + "\n");
                     
                 break;
             }
