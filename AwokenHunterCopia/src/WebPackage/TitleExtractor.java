@@ -18,6 +18,10 @@ import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
  
+/**
+ *
+ * @author Manuel
+ */
 public class TitleExtractor {
     /* the CASE_INSENSITIVE flag accounts for
      * sites that use uppercase title tags.

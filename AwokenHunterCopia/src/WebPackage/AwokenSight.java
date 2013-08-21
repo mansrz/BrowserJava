@@ -11,12 +11,14 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.event.*;
 /**
- *
- * @author Jake
+ *Clase que contiene la ventana principal, el componente que muestra e interpreta el Html y menus. 
+ * El websocket y los metodos que implementa para poder obtener la informacion. 
+ * @author Alvaro Ortiz, Manuel Suarez, Denisse Pintado
  */
-public class AwokenSight extends javax.swing.JFrame {
+public class AwokenSight extends javax.swing.JFrame implements KeyListener{
 
     /**
      * Creates new form AwokenSight
@@ -29,11 +31,18 @@ public class AwokenSight extends javax.swing.JFrame {
     ArrayList<String> navigationArray;
     int navigationArrayIndex;
     private Historial historial;
-    
+      /** Constructor Awoken Sight 
+       * Inicializa las variables de la ventana principal, agrega eventos. 
+      * @throws IOException  
+      */ 
     public AwokenSight() throws IOException {
         initComponents();
         
-        setSize(500, 500);
+        
+        
+        webDisplay.addKeyListener(this);
+            ini.setEnabled(false);
+        setSize(1000, 500);
         historial=new Historial();
         webSocket = new Socket();
         currentHostName = "";
@@ -49,14 +58,9 @@ public class AwokenSight extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent event)
             {
                 requestHTML(addressBar.getText(), WebNavigationType.ADDRESS);
-                try {
-                    historial.addpagina(addressBar.getText());
-                } catch (IOException ex) {
-                    Logger.getLogger(AwokenSight.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                
             }
         });
-        
         
         
         webDisplay.setContentType("text/html");
@@ -93,19 +97,90 @@ public class AwokenSight extends javax.swing.JFrame {
 "</head>\n" +
 "<body>\n" +
 "<b><p style=\"font:30pt Georgia;color:#ff0000;\">Welcome</p></b>\n" +
-"<p>This is the intro page of your new browser.</p>\n" +
+"<p>This is the intro page of your new browser.</p>\n" +"<marque>Awoken Hunter</marque>"+
 "</body>\n" +
 "</html>");
+        
+        
+        
+        
     }
-    
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+       if(e.isControlDown() && e.getKeyCode()==KeyEvent.VK_S){
+            int d=JOptionPane.showConfirmDialog(rootPane, "Desea salir del navegador?");
+            if(d==JOptionPane.YES_OPTION){
+                dispose();
+            }
+            
+            
+        }
+       
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+          if(e.isControlDown() && e.getKeyCode()==KeyEvent.VK_H){
+                historial.setVisible(true);
+        }
+      
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if(e.isControlDown()){
+  //          System.out.println("control3");
+        }
+    }
+    /** WebProtocol
+       * Enunm para protocoles de web.
+      */ 
     public enum WebProtocol
     {
-        HTTP, HTTPS, UNKNOWN
+        /**
+         *
+         */
+        HTTP,
+        /**
+         *
+         */
+        HTTPS,
+        /**
+         *
+         */
+        UNKNOWN
     }
     
+    /** WebnavigationType
+       * Enunm para los tipos de navegacion web
+      */ 
     public enum WebNavigationType
     {
-        BACK, FORE, REFRESH, ADDRESS, HYPERLINNK, MOVE
+        /**
+         *
+         */
+        BACK,
+        /**
+         *
+         */
+        FORE,
+        /**
+         *
+         */
+        REFRESH,
+        /**
+         *
+         */
+        ADDRESS,
+        /**
+         *
+         */
+        HYPERLINNK,
+        /**
+         *
+         */
+        MOVE
     }
 
     /**
@@ -122,34 +197,52 @@ public class AwokenSight extends javax.swing.JFrame {
         backButton = new javax.swing.JButton();
         foreButton = new javax.swing.JButton();
         refreshButton = new javax.swing.JButton();
+        ini = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         webDisplay = new javax.swing.JEditorPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setPreferredSize(new java.awt.Dimension(844, 30));
 
-        backButton.setText("Back");
+        backButton.setText("back");
         backButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backButtonActionPerformed(evt);
             }
         });
 
-        foreButton.setText("Fore");
+        foreButton.setText("fore");
         foreButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 foreButtonActionPerformed(evt);
             }
         });
 
-        refreshButton.setText("Refresh");
+        refreshButton.setText("refresh");
+        refreshButton.setToolTipText("");
         refreshButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 refreshButtonActionPerformed(evt);
+            }
+        });
+
+        ini.setText("Inicio");
+        ini.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                iniActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("IR");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -158,23 +251,32 @@ public class AwokenSight extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
-                .add(backButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 80, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .add(backButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(18, 18, 18)
+                .add(foreButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(refreshButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(ini, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(34, 34, 34)
+                .add(addressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 625, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(foreButton)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(refreshButton)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 145, Short.MAX_VALUE)
-                .add(addressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 595, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(jButton1)
+                .add(31, 31, 31))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel1Layout.createSequentialGroup()
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(addressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 29, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(backButton)
-                    .add(foreButton)
-                    .add(refreshButton))
-                .add(0, 1, Short.MAX_VALUE))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, backButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(addressBar)
+                        .add(refreshButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(foreButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(jButton1)
+                        .add(ini, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .add(15, 15, 15))
         );
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
@@ -183,7 +285,17 @@ public class AwokenSight extends javax.swing.JFrame {
 
         getContentPane().add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        jMenu1.setText("File");
+        jMenu1.setText("Awoken");
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Cerrar");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Historial");
@@ -197,13 +309,18 @@ public class AwokenSight extends javax.swing.JFrame {
                 jMenu2ComponentShown(evt);
             }
         });
+        jMenu2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jMenu2KeyPressed(evt);
+            }
+        });
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
         if (navigationArrayIndex > 0)
         {
@@ -235,6 +352,46 @@ public class AwokenSight extends javax.swing.JFrame {
         historial.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_jMenu2MouseClicked
 
+    private void jMenu2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jMenu2KeyPressed
+            // TODO add your handling code here:
+       
+    }//GEN-LAST:event_jMenu2KeyPressed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        int d=JOptionPane.showConfirmDialog(rootPane, "Desea salir del navegador?");
+            if(d==JOptionPane.YES_OPTION){
+                dispose();
+            }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void iniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniActionPerformed
+        webDisplay.setText("<html>\n" +
+"<head>\n" +
+"<title>AwokenHunterBrowser</title>\n" +
+"</head>\n" +
+"<body>\n" +
+"<b><p style=\"font:30pt Georgia;color:#ff0000;\">Welcome</p></b>\n" +
+"<p>This is the intro page of your new browser.</p>\n" +"<marque>Awoken Hunter</marque>"+
+"</body>\n" +
+"</html>");
+        
+    }//GEN-LAST:event_iniActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if(addressBar.getText()!=null){
+        requestHTML(addressBar.getText(), WebNavigationType.ADDRESS);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    /** Funcion RequestHTML
+       * Funcion que hace el requerimiento mediante el websocket y si 
+       * hay exito devuelve el string del html.
+      * @param String.
+      *@param WebnavigationType
+      * @return String.
+      */ 
     private String requestHTML(String webAddress, WebNavigationType navigationType)
     {
         
@@ -327,8 +484,14 @@ public class AwokenSight extends javax.swing.JFrame {
                     
                     
                     addressBar.setText(webAddress);
-                    webDisplay.setText(htmlString);
+                    try {
+                    historial.addpagina(addressBar.getText());
                     
+                } catch (IOException ex) {
+                    Logger.getLogger(AwokenSight.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                    webDisplay.setText(htmlString);
+                    ini.setEnabled(true);
                     currentHostName = hostAddress;
                     
                     
@@ -391,6 +554,7 @@ public class AwokenSight extends javax.swing.JFrame {
         }
         catch (UnknownHostException ex)
         {
+            JOptionPane.showMessageDialog(rootPane, "Error\nPosiles Fallas:\n\t1.Escriba correctamente la dirección\n\t2.Compruebe su conexión a Internet","Alerta",2);
             System.out.println("Exception");
         }
         catch (IOException ex)
@@ -449,9 +613,12 @@ public class AwokenSight extends javax.swing.JFrame {
     private javax.swing.JTextField addressBar;
     private javax.swing.JButton backButton;
     private javax.swing.JButton foreButton;
+    private javax.swing.JButton ini;
+    private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton refreshButton;

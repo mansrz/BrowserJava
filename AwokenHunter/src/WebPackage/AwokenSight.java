@@ -126,6 +126,7 @@ public class AwokenSight extends javax.swing.JFrame {
         webDisplay = new javax.swing.JEditorPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -183,10 +184,21 @@ public class AwokenSight extends javax.swing.JFrame {
 
         getContentPane().add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        jMenu1.setText("File");
+        jMenu1.setText("Awoken");
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Cerrar");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Historial");
+        jMenu2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.CTRL_MASK));
         jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jMenu2MouseClicked(evt);
@@ -234,6 +246,11 @@ public class AwokenSight extends javax.swing.JFrame {
 
         historial.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_jMenu2MouseClicked
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private String requestHTML(String webAddress, WebNavigationType navigationType)
     {
@@ -452,6 +469,7 @@ public class AwokenSight extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton refreshButton;

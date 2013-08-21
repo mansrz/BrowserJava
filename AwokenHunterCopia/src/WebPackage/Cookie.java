@@ -11,11 +11,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- *
- * @author Manuel
+ *Clase que se encarga de obtener el cookie en el string que viene del HTML request
+ * y guarda la informacion que viene en el "Set-Cookie" 
  */
 public class Cookie {
     String cookie,nombre1;
+    /** Funcion getnombre
+       * nos da la direccion sin el .
+       * @param nombre 
+       * @return String.
+      */ 
     public String getnombre(String nombre){
          int c1=0,c2;
        c1=nombre.indexOf(".");
@@ -27,6 +32,12 @@ public class Cookie {
        return nombre.substring(c1+1,c2);    
        }
     }
+    /** Metodo Constructor Cookie
+       *Construye el cookie en un archivo 
+       * con la informacion que se encontro.
+       * @param cook
+       * @param nombre  
+      */ 
     public Cookie(String cook, String nombre){
         System.out.println(nombre);
       nombre1=getnombre(nombre);
@@ -44,7 +55,7 @@ public class Cookie {
        }
        }
         
-       f = new File("Awoke@"+nombre1+".txt");
+       f = new File("Cookies/Awoke@"+nombre1+".txt");
        //Escritura
        try{
        FileWriter w = new FileWriter(f);
